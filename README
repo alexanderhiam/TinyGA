@@ -1,0 +1,82 @@
+************************************************************************
+TinyGA - rev 0.1
+Created: 1/2012
+Author: Alexander Hiam - <ahiam@marlboro.edu> - http://www.alexanderhiam.com
+Website: https://github.com/alexanderhiam/TinyGA
+
+A lightweight genetic algorithm library for Arduino microcontrollers.
+
+Copyright (c) 2012 - Alexander Hiam 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+************************************************************************
+
+Each individual is a single unsigned char. The user provides a fitness
+function which takes an individual and returns an unsigned char fitness 
+rating. A simple 'best-half' selection routine is used, where the best
+scoring half of the population survives, then the rest of the population
+is filled by randomly combining the surviving half. The combination
+routine simply slices each pair of selected parents at one random
+crossover point and returns a child which is made of one part of each 
+parent. There is also a chance that each child will mutate randomly. 
+The chance of mutation is user-defined in TinyGA.h.
+
+A population can also be saved in the Arduino's EEPROM using the save() 
+and load() methods. The population is saved in the form:
+
+ Value:  key    key    key  population_size  population--->
+  Byte:  \0/    \1/    \2/    \3------4/     \5--->
+
+where key is the value TINYGA_KEY in TinyGA.h which indicates that there
+is a saved population when it is written to the first three bytes of the
+EEPROM (starting at EEPROM_OFFSET).
+
+
+API Usage:
+ -TinyGA(uint8_t (*fitness_function)(uint8_t))
+   Creates and returns an instance of the TinyGA class. Must be passed
+   a user-defined function which takes an unsigned char individual and
+   returns an unsigned char fitness rating. Fitnesses should range from
+   0-255, where 0 is the worst rating and 255 indicates that the correct
+   answer has been found and the algorithm should stop evolving. 
+
+ -TinyGA.init(uint8_t population_size)
+   Initialize a randomly generated population of the given size.
+
+ -TinyGA.load(void)
+   Attempts to load a population from the EEPROM. Returns 1 if successful,
+   0 if there is no population in memory.
+
+ -TinyGA.save(void)
+   Attempts to save the current population. Returns 1 if successful,
+   0 if the population size + EEPROM_OFFSET is greater than EEPROM_SIZE.
+
+ -TinyGA.print(void)
+   Prints the population size, current generation and the current 
+   population to Serial. Serial.begin() must be called before hand.
+
+ -TinyGA.reset(void)
+   Resets to random population with current population size.
+   The difference between reset() and init() for resetting the algorithm
+   is that reset() will write over TINYGA_KEY in the EEPROM and init()
+   won't effect the EEPROM.
+
+ -TinyGA.reset(uint8_t new_population_size)
+   Resets to random population with new population size. 
+   Also resets EEPROM.
+
+ -TinyGA.run(uint8_t n_generations)
+   Runs the algorithm the given ammount of generations. Returns 0
+   unless the fitness function has returned 255 indicating a correct
+   answer, in which case the individual that scored 255 is returned.
