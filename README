@@ -1,5 +1,5 @@
 ************************************************************************
-TinyGA - rev 0.1
+TinyGA - rev 0.1.5
 Created: 1/2012
 Author: Alexander Hiam - ahiam@marlboro.edu - www.alexanderhiam.com
 Website: https://github.com/alexanderhiam/TinyGA
@@ -35,8 +35,8 @@ The chance of mutation is user-defined in TinyGA.h.
 A population can also be saved in the Arduino's EEPROM using the save() 
 and load() methods. The population is saved in the form:
 
- Value:  key    key    key  population_size  population--->
-  Byte:  \0/    \1/    \2/    \3------4/     \5--->
+ Value:  key    key    key  population_size  generation   population--->
+  Byte:  \0/    \1/    \2/    \3------4/      \5----7/     \8------->
 
 where key is the value TINYGA_KEY in TinyGA.h which indicates that there
 is a saved population when it is written to the first three bytes of the
