@@ -1,5 +1,5 @@
 /*
- TinyGA - TinyGA.cpp - rev 0.1
+ TinyGA - TinyGA.cpp - rev 0.1.5
  Created: 1/2012
  Author: Alexander Hiam - <ahiam@marlboro.edu> - http://www.alexanderhiam.com
  Website: https://github.com/alexanderhiam/TinyGA
@@ -55,9 +55,15 @@ uint8_t TinyGA::load(void) {
     }
   }
   pop_size = eread(EEPROM_OFFSET+3);
-  generation = (eread(EEPROM_OFFSET+4)<<8)|eread(EEPROM_OFFSET+5);
+
+  // Feeling lazy, I'll put this in a loop some day:
+  generation = (eread(EEPROM_OFFSET+4)<<24) |
+               (eread(EEPROM_OFFSET+5)<<16) |
+               (eread(EEPROM_OFFSET+6)<<8)  |
+                eread(EEPROM_OFFSET+7);
+    
   for (i=0; i<pop_size; i++) {
-    population[i] = eread(EEPROM_OFFSET+6+i);
+    population[i] = eread(EEPROM_OFFSET+8+i);
   }
   return 1;
 }
@@ -70,11 +76,16 @@ uint8_t TinyGA::save(void) {
   for (i=0; i<3; i++) {
     ewrite(EEPROM_OFFSET+i, TINYGA_KEY);
   }
+
+  // Again, feeling lazy, I'll put this in a loop some day:
   ewrite(EEPROM_OFFSET+3, pop_size);
-  ewrite(EEPROM_OFFSET+4, generation>>8);
-  ewrite(EEPROM_OFFSET+5, generation&0xff);
+  ewrite(EEPROM_OFFSET+4, (generation>>24)&0xff);
+  ewrite(EEPROM_OFFSET+5, (generation>>16)&0xff);
+  ewrite(EEPROM_OFFSET+6, (generation>>8)&0xff);
+  ewrite(EEPROM_OFFSET+7, generation&0xff);
+
   for (i=0; i<pop_size; i++) {
-    ewrite(EEPROM_OFFSET+6+i, population[i]);
+    ewrite(EEPROM_OFFSET+8+i, population[i]);
   }
   return 1;
 }

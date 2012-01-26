@@ -1,5 +1,5 @@
 /*
- TinyGA - TinyGA.h - rev 0.1
+ TinyGA - TinyGA.h - rev 0.1.5
  Created: 1/2012
  Author: Alexander Hiam - <ahiam@marlboro.edu> - http://www.alexanderhiam.com
  Website: https://github.com/alexanderhiam/TinyGA
@@ -27,7 +27,7 @@
 
 #include <inttypes.h>
 
-#define MAX_POPULATION 100 // < EEPROM_SIZE-6
+#define MAX_POPULATION 100 // < EEPROM_SIZE-8
                            // Used for population and fitness buffer sizes
 
 #define P_MUTATION 10 
@@ -52,7 +52,8 @@ class TinyGA {
   void reset(void);
   void reset(uint8_t new_population_size);
   uint8_t run(uint8_t n_generations);
-  uint8_t generation;
+  int generation;
+  uint8_t pop_size;
 
  private:
   void evolve(void);
@@ -62,7 +63,6 @@ class TinyGA {
   uint8_t (*fitness)(uint8_t);
   uint8_t population[MAX_POPULATION];
   uint8_t fitnesses[MAX_POPULATION];
-  uint8_t pop_size;
 };
 
 #endif
