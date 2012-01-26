@@ -1,5 +1,5 @@
 /*
- TinyGA - TinyGA.h - rev 0.1.5
+ TinyGA - TinyGA.h - v0.1.5
  Created: 1/2012
  Author: Alexander Hiam - <ahiam@marlboro.edu> - http://www.alexanderhiam.com
  Website: https://github.com/alexanderhiam/TinyGA
