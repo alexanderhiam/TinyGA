@@ -116,6 +116,7 @@ void TinyGA::reset(void) {
 }
 
 void TinyGA::reset(uint8_t new_population_size) {
+  uint8_t i;
   init(new_population_size);
   for (i=0; i<3; i++) {
     if (eread(EEPROM_OFFSET) != TINYGA_KEY) return;
