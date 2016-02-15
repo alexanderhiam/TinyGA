@@ -5,17 +5,12 @@ Uses the TinyGA genetic algorithm library to guess numbers.
 
 #include <TinyGA.h>
 
+uint8_t fitness(uint8_t individual);
+
 // Create TinyGA instance, giving it a fitness function:
 TinyGA ga = TinyGA(fitness);
 
 uint8_t number_to_guess, char_num; 
-
-void setup() {
-  Serial.begin(9600);
-  // Must seed random number generator before initializing TinyGA:
-  randomSeed(analogRead(A4));
-  start();
-}
 
 void start() {
   uint8_t i;
@@ -41,6 +36,13 @@ uint8_t fitness(uint8_t individual) {
   /* The fitenss function; takes a guess and returns a score that is larger 
      the closer to the correct number it is, and 255 if correct. */
   return 255 - abs(number_to_guess-individual);
+}
+
+void setup() {
+  Serial.begin(9600);
+  // Must seed random number generator before initializing TinyGA:
+  randomSeed(analogRead(A4));
+  start();
 }
 
 void loop() {
